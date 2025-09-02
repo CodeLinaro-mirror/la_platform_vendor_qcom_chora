@@ -70,7 +70,7 @@ def define_techpack_modules(target, msm_target, variant):
     copy_to_dist_dir(
         name = "{}_all_vendor_module_dist".format(target),
         data = techpack_targets,
-        dist_dir = "../device/qcom/canoe-kernel/techpack",
+        dist_dir = "../device/qcom/chora-kernel/techpack",
         flat = True,
         wipe_dist_dir = False,
         allow_duplicate_filenames = False,

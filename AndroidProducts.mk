@@ -1,5 +1,5 @@
 PRODUCT_MAKEFILES := \
-   $(LOCAL_DIR)/canoe.mk
+   $(LOCAL_DIR)/chora.mk
 
 COMMON_LUNCH_CHOICES := \
-        canoe-userdebug
+        chora-userdebug

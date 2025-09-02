@@ -1,6 +1,6 @@
-TARGET_BOARD_PLATFORM := canoe
-TARGET_BOARD_FAMILY := f-canoe
-TARGET_BOOTLOADER_BOARD_NAME := canoe
+TARGET_BOARD_PLATFORM := chora
+TARGET_BOARD_FAMILY := f-chora
+TARGET_BOOTLOADER_BOARD_NAME := chora
 
 BUILD_BROKEN_DUP_RULES := true
 
@@ -50,7 +50,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.soc.manufacturer=QTI
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.board.family=f-canoe
+    ro.vendor.board.family=f-chora
 
 # For QSSI builds, we should skip building the system image. Instead we build the
 # "non-system" images (that we support).
@@ -278,10 +278,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 ###########
 # Target naming
-PRODUCT_NAME := canoe
-PRODUCT_DEVICE := canoe
+PRODUCT_NAME := chora
+PRODUCT_DEVICE := chora
 PRODUCT_BRAND := qti
-PRODUCT_MODEL := Canoe for arm64
+PRODUCT_MODEL := Chora for arm64
 #----------------------------------------------------------------------
 # wlan specific
 #----------------------------------------------------------------------
@@ -289,10 +289,10 @@ ifeq ($(TARGET_USES_QMAA), true)
 ifneq ($(TARGET_USES_QMAA_OVERRIDE_WLAN), true)
 include device/qcom/wlan/default/wlan.mk
 else
-include device/qcom/wlan/canoe/wlan.mk
+include device/qcom/wlan/chora/wlan.mk
 endif
 else
-include device/qcom/wlan/canoe/wlan.mk
+include device/qcom/wlan/chora/wlan.mk
 endif
 
 #----------------------------------------------------------------------
@@ -321,7 +321,7 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 ###########
 # Target configurations
 
-QCOM_BOARD_PLATFORMS += canoe
+QCOM_BOARD_PLATFORMS += chora
 
 TARGET_USES_QSSI := true
 
@@ -412,22 +412,22 @@ AB_OTA_POSTINSTALL_CONFIG += \
 QTI_CAMERA_PROVIDER_SERVICE := 2.7
 QTI_CAMERA_AON_SERVICE := 1.2
 
-DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/canoe/framework_manifest.xml
+DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/chora/framework_manifest.xml
 
 # Enable compilation of image_generation_tool
 TARGET_USES_IMAGE_GEN_TOOL := true
 
 # QCV allows multiple chipsets to be supported on a single vendor.
-# Add vintf device manifests for chipsets in canoe QCV family below.
+# Add vintf device manifests for chipsets in chora QCV family below.
 ifeq ($(TARGET_USES_QMAA), true)
 TARGET_USES_QCV := false
 else
 TARGET_USES_QCV := true
 endif
 
-DEVICE_MANIFEST_SKUS := canoe alor
-DEVICE_MANIFEST_CANOE_FILES := device/qcom/canoe/manifest_canoe.xml
-DEVICE_MANIFEST_ALOR_FILES := device/qcom/canoe/manifest_alor.xml
+DEVICE_MANIFEST_SKUS := chora alor
+DEVICE_MANIFEST_CHORA_FILES := device/qcom/chora/manifest_chora.xml
+DEVICE_MANIFEST_ALOR_FILES := device/qcom/chora/manifest_alor.xml
 
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 
