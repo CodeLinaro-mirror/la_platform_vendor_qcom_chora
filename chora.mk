@@ -425,9 +425,8 @@ else
 TARGET_USES_QCV := true
 endif
 
-DEVICE_MANIFEST_SKUS := chora alor
+DEVICE_MANIFEST_SKUS := chora
 DEVICE_MANIFEST_CHORA_FILES := device/qcom/chora/manifest_chora.xml
-DEVICE_MANIFEST_ALOR_FILES := device/qcom/chora/manifest_alor.xml
 
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 
