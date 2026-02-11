@@ -1,5 +1,5 @@
 TARGET_BOARD_PLATFORM := chora
-TARGET_BOARD_FAMILY := f-chora
+TARGET_BOARD_FAMILY := f-canoe
 TARGET_BOOTLOADER_BOARD_NAME := chora
 
 BUILD_BROKEN_DUP_RULES := true
@@ -50,7 +50,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.soc.manufacturer=QTI
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.board.family=f-chora
+    ro.vendor.board.family=f-canoe
 
 # For QSSI builds, we should skip building the system image. Instead we build the
 # "non-system" images (that we support).
