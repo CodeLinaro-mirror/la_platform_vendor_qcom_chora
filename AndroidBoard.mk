@@ -101,13 +101,6 @@ endif
 #----------------------------------------------------------------------
 include vendor/qcom/opensource/core-utils/build/AndroidBoardCommon.mk
 
-#----------------------------------------------------------------------
-# wlan specific
-#----------------------------------------------------------------------
-ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
-include device/qcom/wlan/chora/AndroidBoardWlan.mk
-endif
-
 $(warning his is to print target out vendor $(TARGET_OUT_VENDOR))
 $(info I am here)
 VENDOR_VM_SYSTEM_MOUNT_POINT := $(TARGET_OUT_VENDOR)/vm-system
