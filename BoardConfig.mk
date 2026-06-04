@@ -30,9 +30,17 @@ BOARD_RAMDISK_USE_LZ4 := true
 
 -include $(QCPATH)/common/chora/BoardConfigVendor.mk
 FORCE_USE_ANDROIDMK_FOR_WPA_CONF := true
+# Base ABL security profile XML.
 SECTOOLS_SECURITY_PROFILE := $(QCPATH)/securemsm/security_profiles/chora_security_profile.xml
 SECTOOLS_SECURITY_PROFILE_SPF := $(QCPATH)/securemsm/security_profiles/poros_security_profile.xml
 SECTOOLS_ABL_SUFFIX := metav2
+
+# Extra signed ABL variants.
+# Naming convention: SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_<suffix>
+# - <suffix>  : appended to the output filename  ->  abl-<suffix>.elf
+# - value     : one or more space-separated security-profile XMLs
+# Simply defining this variable is enough; no separate registry list is needed.
+SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_metav2 := $(QCPATH)/securemsm/security_profiles/poros_security_profile.xml
 
 USE_OPENGL_RENDERER := true
 
