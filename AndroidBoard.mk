@@ -24,6 +24,7 @@ TARGET_EMMC_BOOTLOADER := $(TARGET_BOARD_UNSIGNED_ABL_DIR)/unsigned_abl.elf
 SIGN_ABL := $(PRODUCT_OUT)/abl.elf
 
 SECTOOLSV2_BIN := $(QCPATH)/sectools/Linux/sectools
+SIGN_ABL_SPF := $(PRODUCT_OUT)/abl-$(SECTOOLS_ABL_SUFFIX).elf
 define sec-image-generate
         echo "Generating signed appsbl using secimagev2 tool"
         rm -rf $(PRODUCT_OUT)/abl.elf
@@ -39,14 +40,33 @@ endef
 
 $(SIGN_ABL): $(TARGET_EMMC_BOOTLOADER)
 	$(call sec-image-generate)
+
+define sec-image-generate-spf
+        echo "Generating signed appsbl ($(SECTOOLS_ABL_SUFFIX) suffix) using SPF security profile"
+        rm -rf $(SIGN_ABL_SPF)
+        ( $(SECTOOLSV2_BIN) secure-image $(TARGET_EMMC_BOOTLOADER) \
+                --outfile $(SIGN_ABL_SPF) \
+                --image-id ABL \
+                --security-profile $(SECTOOLS_SECURITY_PROFILE_SPF) \
+                --sign \
+                --signing-mode TEST \
+                > $(PRODUCT_OUT)/secimage_$(SECTOOLS_ABL_SUFFIX).log 2>&1 )
+        echo "Completed secimagev2 signed appsbl (ABL $(SECTOOLS_ABL_SUFFIX)) (logs in $(PRODUCT_OUT)/secimage_$(SECTOOLS_ABL_SUFFIX).log)"
+endef
+
+$(SIGN_ABL_SPF): $(TARGET_EMMC_BOOTLOADER)
+	$(call sec-image-generate-spf)
 $(INSTALLED_BOOTLOADER_MODULE): $(SIGN_ABL) | $(ACP)
 endif
 
 #   $(transform-prebuilt-to-target)
 $(BUILT_TARGET_FILES_PACKAGE): $(INSTALLED_BOOTLOADER_MODULE)
+$(BUILT_TARGET_FILES_PACKAGE): $(SIGN_ABL_SPF)
 
 droidcore: $(INSTALLED_BOOTLOADER_MODULE)
 droidcore-unbundled: $(INSTALLED_BOOTLOADER_MODULE)
+droidcore: $(SIGN_ABL_SPF)
+droidcore-unbundled: $(SIGN_ABL_SPF)
 endif
 
 #----------------------------------------------------------------------

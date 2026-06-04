@@ -31,6 +31,8 @@ BOARD_RAMDISK_USE_LZ4 := true
 -include $(QCPATH)/common/chora/BoardConfigVendor.mk
 FORCE_USE_ANDROIDMK_FOR_WPA_CONF := true
 SECTOOLS_SECURITY_PROFILE := $(QCPATH)/securemsm/security_profiles/chora_security_profile.xml
+SECTOOLS_SECURITY_PROFILE_SPF := $(QCPATH)/securemsm/security_profiles/poros_security_profile.xml
+SECTOOLS_ABL_SUFFIX := metav2
 
 USE_OPENGL_RENDERER := true
 
