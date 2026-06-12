@@ -426,8 +426,10 @@ else
 TARGET_USES_QCV := true
 endif
 
-DEVICE_MANIFEST_SKUS := chora
+DEVICE_MANIFEST_SKUS := chora ravelin bourtzi
 DEVICE_MANIFEST_CHORA_FILES := device/qcom/chora/manifest_chora.xml
+DEVICE_MANIFEST_RAVELIN_FILES := device/qcom/chora/manifest_ravelin.xml
+DEVICE_MANIFEST_BOURTZI_FILES := device/qcom/chora/manifest_bourtzi.xml
 
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 
