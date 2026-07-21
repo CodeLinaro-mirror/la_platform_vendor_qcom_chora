@@ -24,38 +24,44 @@ TARGET_EMMC_BOOTLOADER := $(TARGET_BOARD_UNSIGNED_ABL_DIR)/unsigned_abl.elf
 SIGN_ABL := $(PRODUCT_OUT)/abl.elf
 
 SECTOOLSV2_BIN := $(QCPATH)/sectools/Linux/sectools
-SIGN_ABL_SPF := $(PRODUCT_OUT)/abl-$(SECTOOLS_ABL_SUFFIX).elf
+
+# Unified signed-image generator.
+# Usage: $(call sec-image-generate,<outfile>,<security-profile>,<log-suffix>)
+#   $(1) - output signed ELF path
+#   $(2) - sectools security-profile XML(s), space-separated
+#   $(3) - log/description suffix (empty string for the base ABL variant)
 define sec-image-generate
-        echo "Generating signed appsbl using secimagev2 tool"
-        rm -rf $(PRODUCT_OUT)/abl.elf
+        echo "Generating signed appsbl$(if $(3), ($(3) suffix),) using secimagev2 tool"
+        rm -rf $(1)
         ( $(SECTOOLSV2_BIN) secure-image $(TARGET_EMMC_BOOTLOADER) \
-                --outfile $(PRODUCT_OUT)/abl.elf \
+                --outfile $(1) \
                 --image-id ABL \
-                --security-profile $(SECTOOLS_SECURITY_PROFILE) \
+                --security-profile $(2) \
                 --sign \
                 --signing-mode TEST \
-                > $(PRODUCT_OUT)/secimage.log 2>&1 )
-        echo "Completed secimagev2 signed appsbl (ABL) (logs in $(PRODUCT_OUT)/secimage.log)"
+                > $(PRODUCT_OUT)/secimage$(if $(3),_$(3),).log 2>&1 )
+        echo "Completed secimagev2 signed appsbl (ABL$(if $(3), $(3),)) (logs in $(PRODUCT_OUT)/secimage$(if $(3),_$(3),).log)"
 endef
 
+# Base ABL signed image
 $(SIGN_ABL): $(TARGET_EMMC_BOOTLOADER)
-	$(call sec-image-generate)
+	$(call sec-image-generate,$(SIGN_ABL),$(SECTOOLS_SECURITY_PROFILE),)
 
-define sec-image-generate-spf
-        echo "Generating signed appsbl ($(SECTOOLS_ABL_SUFFIX) suffix) using SPF security profile"
-        rm -rf $(SIGN_ABL_SPF)
-        ( $(SECTOOLSV2_BIN) secure-image $(TARGET_EMMC_BOOTLOADER) \
-                --outfile $(SIGN_ABL_SPF) \
-                --image-id ABL \
-                --security-profile $(SECTOOLS_SECURITY_PROFILE_SPF) \
-                --sign \
-                --signing-mode TEST \
-                > $(PRODUCT_OUT)/secimage_$(SECTOOLS_ABL_SUFFIX).log 2>&1 )
-        echo "Completed secimagev2 signed appsbl (ABL $(SECTOOLS_ABL_SUFFIX)) (logs in $(PRODUCT_OUT)/secimage_$(SECTOOLS_ABL_SUFFIX).log)"
-endef
+# Extra signed ABL images — auto-discovered from BoardConfig.mk.
+# Any variable named SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_<suffix> triggers
+# a new signed target abl-<suffix>.elf using the listed security-profile XMLs.
+# No separate registry variable is needed; presence of the variable is enough.
+_EXTRA_ABL_VARS    := $(filter SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_%,$(.VARIABLES))
+_EXTRA_ABL_SUFFIXES := $(patsubst SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_%,%,$(_EXTRA_ABL_VARS))
+$(foreach _sfx,$(_EXTRA_ABL_SUFFIXES), \
+  $(eval _extra_out := $(PRODUCT_OUT)/abl-$(_sfx).elf) \
+  $(eval $(_extra_out): $(TARGET_EMMC_BOOTLOADER) ; \
+    $$(call sec-image-generate,$$@,$$(SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_$(_sfx)),$(_sfx))) \
+  $(eval $(BUILT_TARGET_FILES_PACKAGE): $(_extra_out)) \
+  $(eval droidcore: $(_extra_out)) \
+  $(eval droidcore-unbundled: $(_extra_out)) \
+)
 
-$(SIGN_ABL_SPF): $(TARGET_EMMC_BOOTLOADER)
-	$(call sec-image-generate-spf)
 $(INSTALLED_BOOTLOADER_MODULE): $(SIGN_ABL) | $(ACP)
 endif
 
@@ -122,7 +128,6 @@ endif
 include vendor/qcom/opensource/core-utils/build/AndroidBoardCommon.mk
 
 $(warning his is to print target out vendor $(TARGET_OUT_VENDOR))
-$(info I am here)
 VENDOR_VM_SYSTEM_MOUNT_POINT := $(TARGET_OUT_VENDOR)/vm-system
 ALL_DEFAULT_INSTALLED_MODULES += $(VENDOR_VM_SYSTEM_MOUNT_POINT)
 $(VENDOR_VM_SYSTEM_MOUNT_POINT):
