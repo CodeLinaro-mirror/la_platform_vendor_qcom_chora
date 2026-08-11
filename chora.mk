@@ -141,6 +141,7 @@ TARGET_USES_QMAA_OVERRIDE_SYNX := true
 TARGET_USES_QMAA_OVERRIDE_SECUREMSM_TESTS := true
 TARGET_USES_QMAA_OVERRIDE_SMCINVOKE := true
 TARGET_USES_QMAA_OVERRIDE_SOTER := true
+TARGET_USES_QMAA_OVERRIDE_TFTP := true
 TARGET_USES_QMAA_OVERRIDE_REMOTE_EFS := true
 TARGET_USES_QMAA_OVERRIDE_USB := true
 TARGET_USES_QMAA_OVERRIDE_DPM := true
@@ -426,8 +427,10 @@ else
 TARGET_USES_QCV := true
 endif
 
-DEVICE_MANIFEST_SKUS := chora
+DEVICE_MANIFEST_SKUS := chora ravelin bourtzi
 DEVICE_MANIFEST_CHORA_FILES := device/qcom/chora/manifest_chora.xml
+DEVICE_MANIFEST_RAVELIN_FILES := device/qcom/chora/manifest_ravelin.xml
+DEVICE_MANIFEST_BOURTZI_FILES := device/qcom/chora/manifest_bourtzi.xml
 
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 
