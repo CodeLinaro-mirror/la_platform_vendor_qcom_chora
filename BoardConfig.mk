@@ -30,7 +30,15 @@ BOARD_RAMDISK_USE_LZ4 := true
 
 -include $(QCPATH)/common/chora/BoardConfigVendor.mk
 FORCE_USE_ANDROIDMK_FOR_WPA_CONF := true
+# Base ABL security profile XML.
 SECTOOLS_SECURITY_PROFILE := $(QCPATH)/securemsm/security_profiles/chora_security_profile.xml
+
+# Extra signed ABL variants.
+# Naming convention: SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_<suffix>
+# - <suffix>  : appended to the output filename  ->  abl-<suffix>.elf
+# - value     : one or more space-separated security-profile XMLs
+# Simply defining this variable is enough; no separate registry list is needed.
+SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_metav2 := $(QCPATH)/securemsm/security_profiles/poros_security_profile.xml
 
 USE_OPENGL_RENDERER := true
 
@@ -142,7 +150,7 @@ TARGET_USES_NEW_ION_API := true
 TARGET_USES_SMMU_PROXY := true
 
 BOARD_KERNEL_CMDLINE := video=vfb:640x400,bpp=32,memsize=3072000
-BOARD_BOOTCONFIG := androidboot.hardware=qcom androidboot.memcg=1 androidboot.usbcontroller=a600000.dwc3 androidboot.usb.dwc3_msm=a600000.hsusb androidboot.load_modules_parallel=true
+BOARD_BOOTCONFIG := androidboot.hardware=qcom androidboot.memcg=1 androidboot.usbcontroller=a600000.dwc3 androidboot.load_modules_parallel=true
 
 # TARGET_CONSOLE_ENABLED allows to override the default kernel configuration
 # true  -- override kernel configuration to enable console
