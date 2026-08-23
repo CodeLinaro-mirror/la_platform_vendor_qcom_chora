@@ -42,6 +42,13 @@ SECTOOLS_ABL_SUFFIX := metav2
 # Simply defining this variable is enough; no separate registry list is needed.
 SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_metav2 := $(QCPATH)/securemsm/security_profiles/poros_security_profile.xml
 
+# Extra signed ABL variants.
+# Naming convention: SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_<suffix>
+# - <suffix>  : appended to the output filename  ->  abl-<suffix>.elf
+# - value     : one or more space-separated security-profile XMLs
+# Simply defining this variable is enough; no separate registry list is needed.
+SECTOOLS_SECURITY_PROFILE_EXTRA_ABL_metav2 := $(QCPATH)/securemsm/security_profiles/poros_security_profile.xml
+
 USE_OPENGL_RENDERER := true
 
 # TODO: Enable it back when we have a path forward
