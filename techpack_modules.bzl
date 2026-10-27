@@ -1,4 +1,5 @@
-load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
+load("@rules_pkg//pkg:install.bzl", "pkg_install")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
 def define_techpack_modules(target, msm_target, variant):
     techpack_targets = [
@@ -65,13 +66,17 @@ def define_techpack_modules(target, msm_target, variant):
         "//vendor/nxp/opensource/driver:{}_nxp-nci".format(target),
     ]
 
-    copy_to_dist_dir(
+      # 1. Define how files are packaged (permissions + flattening)
+    pkg_files(
+        name = "{}_all_vendor_module_dist_files".format(target),
+        srcs = techpack_targets,
+        strip_prefix = strip_prefix.files_only(),  # Equivalent to flat = True
+        visibility = ["//visibility:private"],
+    )
+
+    # 2. Define the installation to the distribution directory
+    pkg_install(
         name = "{}_all_vendor_module_dist".format(target),
-        data = techpack_targets,
-        dist_dir = "../device/qcom/chora-kernel/techpack",
-        flat = True,
-        wipe_dist_dir = False,
-        allow_duplicate_filenames = False,
-        mode_overrides = {"**/*": "644"},
-        log = "info",
+        srcs = [":{}_all_vendor_module_dist_files".format(target)],
+        destdir = "../device/qcom/chora-kernel/techpack",  # Equivalent to dist_dir
     )
